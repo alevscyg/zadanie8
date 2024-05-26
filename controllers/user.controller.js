@@ -1,7 +1,7 @@
 const db = require('../db');
 class UserController {
     
-    async createUser(req, res) {
+    createUser = async(req, res) => {
         let body = '';
         req.on('data', (data) => {
             body += data;
@@ -22,17 +22,17 @@ class UserController {
         
     }
 
-    async getUser(req, res) {
+    getUser = async(req, res) => {
         res.writeHead(201, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(await db.getUsers()));
     }
 
-    async getUserById(req, res, id){
+    getUserById = async(req, res, id) => {
         res.writeHead(201, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(await db.getUserById(Number(id))));
     }
 
-    async deleteUserById(req, res, id){
+    deleteUserById = async(req, res, id) => {
         if(await db.deleteUser(id)){
             res.writeHead(201, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({message: `THE USER WITH ID = ${id} HAS BEEN DELETED`}));
@@ -43,7 +43,7 @@ class UserController {
         }
     }
 
-    async updateUser(req, res, id){
+    updateUser = async(req, res, id) => {
         let body = '';
         req.on('data', (data) => {
             body += data;
