@@ -6,24 +6,24 @@ db.run(`CREATE TABLE IF NOT EXISTS users (
     age TINYINT NOT NULL
 )`);
 module.exports = {
-    async createUser(name, age) {
+    createUser: async(name, age) => {
         db.run(`INSERT INTO users (name, age) VALUES (?, ?)`, [name, age]);
         return 'THE USER HAS BEEN CREATED';
     },
-    async getUsers() {
+    getUsers: async() => {
         return await new Promise((resolve) => {
             db.all(`SELECT * FROM users`, (err, row) => {resolve(row)});
         });
     },
-    async getUserById(id) {
+    getUserById: async(id) => {
         return await new Promise((resolve) => {
             db.get(`SELECT * FROM users WHERE id = ?`, [id], (err, row) => {resolve(row)});
         });
     },
-    async deleteUser(id) {
+    deleteUser: async(id) => {
         return db.run(`DELETE FROM users WHERE id = ?`, [id]);
     },
-    async updateUser(name, age, id){
+    updateUser: async(name, age, id) => {
         db.run(`UPDATE users SET name = ?, age = ? WHERE id = ?`,[name, age, id]);
         return `THE USER WITH ID = ${id} HAS BEEN UPDATED`;
     }
