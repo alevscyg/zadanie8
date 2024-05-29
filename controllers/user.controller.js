@@ -33,14 +33,15 @@ class UserController {
     }
 
     deleteUserById = async(req, res, id) => {
-        if(await db.deleteUser(id)){
+        await db.deleteUser(id)
+        .then(result => {
             res.writeHead(201, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({message: `THE USER WITH ID = ${id} HAS BEEN DELETED`}));
-        }
-        else{
+            res.end(JSON.stringify({message: result}));
+        })
+        .catch(err => {
             res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({message: "ERROR"}));
-        }
+            res.end(JSON.stringify({message: err}));
+        })
     }
 
     updateUser = async(req, res, id) => {
