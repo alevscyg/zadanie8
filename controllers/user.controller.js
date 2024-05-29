@@ -10,26 +10,41 @@ class UserController {
             const parsedBody = JSON.parse(body);
             const userName = parsedBody['name'];
             const userAge = parsedBody['age'];
-            if (userName && userAge) {
+            await db.createUser(userName, userAge)
+            .then(result => {
                 res.writeHead(201, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(await db.createUser(userName, userAge)));
-            }
-            else {
+                res.end(JSON.stringify({message: result}));
+            })
+            .catch(err => {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({message: "Enter name and age"}));
-            }
+                res.end(JSON.stringify({message: err}));
+            })
         });
         
     }
 
     getUser = async(req, res) => {
-        res.writeHead(201, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(await db.getUsers()));
+        await db.getUsers()
+        .then(result => {
+            res.writeHead(201, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({message: result}));
+        })
+        .catch(err => {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({message: err}));
+        })
     }
 
     getUserById = async(req, res, id) => {
-        res.writeHead(201, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(await db.getUserById(Number(id))));
+        await db.getUserById((id))
+        .then(result => {
+            res.writeHead(201, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({message: result}));
+        })
+        .catch(err => {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({message: err}));
+        })
     }
 
     deleteUserById = async(req, res, id) => {
@@ -53,18 +68,16 @@ class UserController {
             const parsedBody = JSON.parse(body);
             const userName = parsedBody['name'];
             const userAge = parsedBody['age'];
-            if (userName && userAge && id) {
+            await db.updateUser(userName, userAge, id)
+            .then(result => {
                 res.writeHead(201, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(await db.updateUser(userName, userAge, id)));
-            }
-            else {
+                res.end(JSON.stringify({message: result}));
+            })
+            .catch(err => {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({message: "Enter name, age and id"}));
-            }
+                res.end(JSON.stringify({message: err}));
+            })
         });
     }
-
-
-    
 }
 module.exports = new UserController();
